@@ -4,7 +4,7 @@ with open("app.py", "w") as f:
 import streamlit as st
 import pandas as pd
 
-st.title("Meu Sistema de Produção")
+st.title("Beira Alta Sistema de Produção")
 
 # Upload das planilhas
 estoque_file = st.file_uploader("Escolha a planilha de Estoque", type=["xlsx","csv"])
