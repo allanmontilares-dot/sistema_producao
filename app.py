@@ -214,11 +214,16 @@ st.dataframe(base, use_container_width=True, hide_index=True)
 # DOWNLOAD
 # =========================
 
-excel = base.to_excel(index=False)
+from io import BytesIO
+
+output = BytesIO()
+
+base.to_excel(output, index=False, engine="openpyxl")
+output.seek(0)
 
 st.download_button(
     "Baixar resultado",
-    data=excel,
+    data=output,
     file_name="resultado.xlsx",
     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 )
