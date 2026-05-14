@@ -1,6 +1,3 @@
-# Criar o arquivo app.py
-with open("app.py", "w") as f:
-    f.write("""
 import streamlit as st
 import pandas as pd
 
@@ -26,4 +23,3 @@ df["Saldo Real"] = df["Saldo Estoque"] - df["Pedido"]
 
 # Mostrar tabela
 st.dataframe(df, use_container_width=True)
-""")
