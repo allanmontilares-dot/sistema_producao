@@ -65,7 +65,7 @@ base["Saldo Estoque"] = base["Saldo Estoque"].fillna(0)
 base["Pedido"] = base["Pedido"].fillna(0)
 
 # =========================
-# GARANTIR NUMÉRICO
+# CONVERTER PARA NÚMERO
 # =========================
 
 base["Média de Venda 2025"] = pd.to_numeric(
@@ -104,13 +104,13 @@ base["Necessidade de P.A"] = (
 )
 
 # =========================
-# MOSTRAR
+# MOSTRAR TABELA
 # =========================
 
 st.dataframe(base, use_container_width=True)
 
 # =========================
-# DOWNLOAD
+# GERAR EXCEL
 # =========================
 
 arquivo_saida = "resultado.xlsx"
@@ -119,8 +119,8 @@ base.to_excel(arquivo_saida, index=False)
 
 with open(arquivo_saida, "rb") as file:
     st.download_button(
-        "Baixar Excel",
-        file,
-        file_name="resultado.xlsx"
-    )
+        label="Baixar Excel",
+        data=file,
+        file_name="resultado.xlsx",
+        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     )
