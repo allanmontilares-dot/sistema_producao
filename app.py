@@ -22,7 +22,23 @@ estoque.columns = estoque.columns.str.strip()
 pedido.columns = pedido.columns.str.strip()
 
 # =========================
-# JUNTAR ESTOQUE
+# REMOVER COLUNAS ANTIGAS
+# =========================
+
+colunas_remover = [
+    "Saldo Estoque",
+    "Pedido",
+    "Saldo Real",
+    "Saldo em dias",
+    "Necessidade de P.A"
+]
+
+for coluna in colunas_remover:
+    if coluna in base.columns:
+        base = base.drop(columns=[coluna])
+
+# =========================
+# MERGE ESTOQUE
 # =========================
 
 base = base.merge(
@@ -32,7 +48,7 @@ base = base.merge(
 )
 
 # =========================
-# JUNTAR PEDIDOS
+# MERGE PEDIDO
 # =========================
 
 base = base.merge(
@@ -47,6 +63,25 @@ base = base.merge(
 
 base["Saldo Estoque"] = base["Saldo Estoque"].fillna(0)
 base["Pedido"] = base["Pedido"].fillna(0)
+
+# =========================
+# GARANTIR NUMÉRICO
+# =========================
+
+base["Média de Venda 2025"] = pd.to_numeric(
+    base["Média de Venda 2025"],
+    errors="coerce"
+).fillna(0)
+
+base["Saldo Estoque"] = pd.to_numeric(
+    base["Saldo Estoque"],
+    errors="coerce"
+).fillna(0)
+
+base["Pedido"] = pd.to_numeric(
+    base["Pedido"],
+    errors="coerce"
+).fillna(0)
 
 # =========================
 # CÁLCULOS
@@ -69,13 +104,13 @@ base["Necessidade de P.A"] = (
 )
 
 # =========================
-# MOSTRAR TABELA
+# MOSTRAR
 # =========================
 
 st.dataframe(base, use_container_width=True)
 
 # =========================
-# DOWNLOAD EXCEL
+# DOWNLOAD
 # =========================
 
 arquivo_saida = "resultado.xlsx"
@@ -87,4 +122,5 @@ with open(arquivo_saida, "rb") as file:
         "Baixar Excel",
         file,
         file_name="resultado.xlsx"
+    )
     )
