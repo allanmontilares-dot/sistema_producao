@@ -26,3 +26,4 @@ df["Saldo Real"] = df["Saldo Estoque"] - df["Pedido"]
 
 # Mostrar tabela
 st.dataframe(df, use_container_width=True)
+""")
