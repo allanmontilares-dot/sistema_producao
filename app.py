@@ -42,6 +42,8 @@ base = base.merge(
     on="Cod. Cx",
     how="left"
 )
+st.write(base.columns)
+st.write(base.head(5))
 
 base = base.merge(
     pedido[["Cod. Cx", "Pedido"]],
