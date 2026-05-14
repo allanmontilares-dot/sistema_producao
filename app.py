@@ -109,6 +109,7 @@ ordem_colunas = [
     "Cod. Cx",
     "Descrição",
 
+    "Média de Venda 2025"
     "Saldo Estoque",
     "Pedido",
     "Saldo Real",
