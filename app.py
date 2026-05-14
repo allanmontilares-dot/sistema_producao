@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import numpy as np
 
 st.set_page_config(layout="wide")
 
@@ -65,23 +66,20 @@ base["Saldo Estoque"] = base["Saldo Estoque"].fillna(0)
 base["Pedido"] = base["Pedido"].fillna(0)
 
 # =========================
-# CONVERTER PARA NÚMERO
+# CONVERTER PARA NUMÉRICO
 # =========================
 
-base["Média de Venda 2025"] = pd.to_numeric(
-    base["Média de Venda 2025"],
-    errors="coerce"
-).fillna(0)
+colunas_numericas = [
+    "Média de Venda 2025",
+    "Saldo Estoque",
+    "Pedido"
+]
 
-base["Saldo Estoque"] = pd.to_numeric(
-    base["Saldo Estoque"],
-    errors="coerce"
-).fillna(0)
-
-base["Pedido"] = pd.to_numeric(
-    base["Pedido"],
-    errors="coerce"
-).fillna(0)
+for coluna in colunas_numericas:
+    base[coluna] = pd.to_numeric(
+        base[coluna],
+        errors="coerce"
+    ).fillna(0)
 
 # =========================
 # CÁLCULOS
@@ -104,13 +102,96 @@ base["Necessidade de P.A"] = (
 )
 
 # =========================
+# ORGANIZAR COLUNAS
+# =========================
+
+ordem_colunas = [
+    "Cod. Cx",
+    "Descrição",
+
+    "Saldo Estoque",
+    "Pedido",
+    "Saldo Real",
+    "Saldo em dias",
+    "Necessidade de P.A",
+
+    "Produzir",
+    "Data produção",
+    "Ordem",
+    "Linha",
+    "Lote",
+    "QTD CX",
+    "Necessidade S.A",
+    "Volume",
+    "Saldo após produção",
+    "Saldo em dias após produção",
+    "nº",
+    "CURVA",
+    "ESTOQUE CURVA ABC"
+]
+
+# mantém apenas colunas existentes
+ordem_colunas = [
+    col for col in ordem_colunas
+    if col in base.columns
+]
+
+base = base[ordem_colunas]
+
+# =========================
+# FORMATAR NÚMEROS
+# =========================
+
+colunas_formatadas = [
+    "Média de Venda 2025",
+    "Saldo Estoque",
+    "Pedido",
+    "Saldo Real",
+    "Necessidade de P.A",
+    "QTD CX",
+    "Necessidade S.A",
+    "Volume",
+    "Saldo após produção",
+    "ESTOQUE CURVA ABC"
+]
+
+for coluna in colunas_formatadas:
+    if coluna in base.columns:
+        base[coluna] = (
+            base[coluna]
+            .round(0)
+            .astype(int)
+            .map(lambda x: f"{x:,}".replace(",", "."))
+        )
+
+# =========================
+# FORMATAR DIAS
+# =========================
+
+if "Saldo em dias" in base.columns:
+    base["Saldo em dias"] = (
+        base["Saldo em dias"]
+        .round(1)
+    )
+
+if "Saldo em dias após produção" in base.columns:
+    base["Saldo em dias após produção"] = (
+        base["Saldo em dias após produção"]
+        .round(1)
+    )
+
+# =========================
 # MOSTRAR TABELA
 # =========================
 
-st.dataframe(base, use_container_width=True)
+st.dataframe(
+    base,
+    use_container_width=True,
+    hide_index=True
+)
 
 # =========================
-# GERAR EXCEL
+# DOWNLOAD EXCEL
 # =========================
 
 arquivo_saida = "resultado.xlsx"
