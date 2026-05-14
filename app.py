@@ -158,11 +158,12 @@ colunas_formatadas = [
 for coluna in colunas_formatadas:
     if coluna in base.columns:
         base[coluna] = (
-            base[coluna]
-            .round(0)
-            .astype(int)
-            .map(lambda x: f"{x:,}".replace(",", "."))
-        )
+    pd.to_numeric(base[coluna], errors="coerce")
+    .fillna(0)
+    .round(0)
+    .astype(int)
+    .map(lambda x: f"{x:,}".replace(",", "."))
+)
 
 # =========================
 # FORMATAR DIAS
