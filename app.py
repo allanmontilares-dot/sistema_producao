@@ -6,7 +6,7 @@ st.set_page_config(layout="wide")
 st.title("Beira Alta Sistema de Produção")
 
 # Ler arquivos
-base = pd.read_excel("base_produtos.xlsx")
+base = pd.read_excel("base_produtos.xlsm")
 estoque = pd.read_excel("estoque.xlsx")
 pedidos = pd.read_excel("pedidos.xlsx")
 
