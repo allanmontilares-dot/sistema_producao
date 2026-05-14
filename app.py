@@ -44,6 +44,7 @@ base = base.merge(
 )
 st.write("DEBUG COLUNAS BASE:", base.columns)
 st.write(base.head(10))
+st.write(base[["Cod. Cx", "Saldo Estoque", "Pedido"]].head(20))
 
 base = base.merge(
     pedido[["Cod. Cx", "Pedido"]],
