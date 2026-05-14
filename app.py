@@ -4,7 +4,7 @@ import numpy as np
 
 st.set_page_config(layout="wide")
 
-st.title("Sistema de Produção")
+st.title("Beira Alta Sistema de Produção")
 
 # =========================
 # LEITURA DOS ARQUIVOS
