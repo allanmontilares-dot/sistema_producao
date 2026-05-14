@@ -4,26 +4,25 @@ with open("app.py", "w") as f:
 import streamlit as st
 import pandas as pd
 
+st.set_page_config(layout="wide")
+
 st.title("Beira Alta Sistema de Produção")
 
-# Upload das planilhas
-estoque_file = st.file_uploader("Escolha a planilha de Estoque", type=["xlsx","csv"])
-pedido_file = st.file_uploader("Escolha a planilha de Pedidos", type=["xlsx","csv"])
-insumo_file = st.file_uploader("Escolha a planilha de Insumos", type=["xlsx","csv"])
+# Ler arquivos
+base = pd.read_excel("base_produtos.xlsx")
+estoque = pd.read_excel("estoque.xlsx")
+pedidos = pd.read_excel("pedidos.xlsx")
 
-# Exibir dados carregados
-if estoque_file is not None:
-    st.subheader("Estoque")
-    estoque_df = pd.read_excel(estoque_file)
-    st.dataframe(estoque_df)
+# Juntar tabelas
+df = base.merge(estoque, on="Cod. Cx", how="left")
+df = df.merge(pedidos, on="Cod. Cx", how="left")
 
-if pedido_file is not None:
-    st.subheader("Pedidos")
-    pedido_df = pd.read_excel(pedido_file)
-    st.dataframe(pedido_df)
+# Preencher vazios
+df["Saldo Estoque"] = df["Saldo Estoque"].fillna(0)
+df["Pedido"] = df["Pedido"].fillna(0)
 
-if insumo_file is not None:
-    st.subheader("Insumos")
-    insumo_df = pd.read_excel(insumo_file)
-    st.dataframe(insumo_df)
-""")
+# Calcular saldo real
+df["Saldo Real"] = df["Saldo Estoque"] - df["Pedido"]
+
+# Mostrar tabela
+st.dataframe(df, use_container_width=True)
